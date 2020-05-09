@@ -1,7 +1,6 @@
 from twython import Twython
 from django.shortcuts import HttpResponse
 from matplotlib.backends.backend_agg import FigureCanvasAgg
-from mpl_toolkits.basemap import Basemap
 from pyspark.ml.feature import Tokenizer, RegexTokenizer, StopWordsRemover, NGram
 from pyspark.sql import SparkSession
 from nltk.corpus import stopwords
@@ -11,6 +10,7 @@ from wordcloud import WordCloud
 from sklearn.cluster import KMeans
 from sklearn.feature_extraction.text import TfidfVectorizer
 from scipy.cluster.hierarchy import linkage
+from mpl_toolkits.basemap import Basemap
 from datetime import date
 import classifier 
 import matplotlib
@@ -24,6 +24,7 @@ import random
 import nltk
 import json
 import io
+
 
 def ObtieneTweets(Busqueda, Cantidad):
     
@@ -325,4 +326,3 @@ def PlotMaps(Tweets):
 
 
     
-

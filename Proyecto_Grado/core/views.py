@@ -5,7 +5,6 @@ from collections import Counter
 import pandas as pd
 import numpy as np
 import re
-import os
 
 def Buscar_Twitter(request, palabras=None):
 
