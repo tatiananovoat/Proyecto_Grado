@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+{% load static %}
+<html>
+
+<head>
+    <title>Analisis Twitter</title>
+    <link rel="stylesheet" href="{% static 'css\bootstrap.css' %}">
+    <link rel="stylesheet" href="{% static 'font-awesome\css\font-awesome.css' %}">
+    <link rel="stylesheet" href="{% static 'js\plugins\footable\css\footable.core.css' %}">
+    <link rel="stylesheet" href="{% static 'css\animate.css' %}">
+    <link rel="stylesheet" href="{% static 'css\style.css' %}" asp-append-version="true">
+    <link rel="icon" href="{% static 'img\favicon.ico' %}">
+    <script src="{% static 'js\jquery-3.1.1.min.js' %}"></script>
+    <script src="{% static 'js\plugins\footable\dist\footable.all.min.js' %}"></script>
+    <script src="{% static 'js\inspinia.js' %}"></script>
+    <script src="{% static 'js\bootstrap.js' %}"></script>
+    <script src="{% static 'js\popper.min.js' %}"></script>
+    <script src="{% static 'js\plugins\metisMenu\jquery.metisMenu.js' %}"></script>
+    <script src="{% static 'js\plugins\slimscroll\jquery.slimscroll.js' %}"></script>
+    <script src="{% static 'js\plugins\pace\pace.min.js' %}"></script>
+
+    <script>
+        jQuery(function ($) {
+            $('.table').footable({
+                "paging": {
+                    "countFormat": "Registro {PF} de {TR} Pagina {CP} de {TP}"
+                }
+
+            });
+            $('.table').attr("border", "0");
+        });
+
+        $(document).ready(function(){
+
+            if("{{ responseClustering0 }}" == "")
+            {
+                document.getElementById("Categoria0").style.display = "none";
+            }
+
+            if("{{ responseClustering1 }}" == "")
+            {
+                document.getElementById("Categoria1").style.display = "none";
+            }
+
+            if("{{ responseClustering2 }}" == "")
+            {
+                document.getElementById("Categoria2").style.display = "none";
+            }
+
+            if("{{ responseClustering3 }}" == "")
+            {
+                document.getElementById("Categoria3").style.display = "none";
+            }
+
+            if("{{ responseClustering4 }}" == "")
+            {
+                document.getElementById("Categoria4").style.display = "none";
+            }
+
+            if("{{ responseClustering5 }}" == "")
+            {
+                document.getElementById("Categoria5").style.display = "none";
+            }
+        });
+    </script>
+</head>
+
+<body class="pace-done">
+    <div class="wrapper">
+        <div class="gray-bg">
+            <div style="padding-left: 5%; padding-right: 5%">
+                <div class="white-bg">
+                    <div class="wrapper wrapper-content animated fadeInRight" style="padding-bottom: 0%">
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div class="ibox ">
+                                    <div class="ibox-content text-center p-md">
+
+                                        <h2><span class="text-navy">Resultados Busqueda Tweets</h2>
+                                        <p>
+                                            En esta pagina encontraras los resultados encontrados de la busqueda
+                                            seleccionada.
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="wrapper wrapper-content animated fadeInRight" style="padding-bottom: 0%">
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div class="ibox">
+                                    <div class="ibox-title">
+                                        <h5>Resultados Tweets</h5>
+                                        <p>A los resultados obtenidos de los tweets se les realizar un proceso de
+                                            estandarización y limpieza que consiste en los siguientes pasos:
+                                        </p>
+                                        <ul>
+                                            <li>Estandarizar Tipografía (Mayúsculas y Minúsculas).</li>
+                                            <li>Se realizar el proceso de tokenizar cada uno de los tweets(separar el
+                                                texto en palabras individuales).</li>
+                                            <li>Eliminar palabras conectoras, eliminar acentos ortográficos o cualquier
+                                                tipo de símbolo que contengan los Tweets descargados.</li>
+                                        </ul>
+                                        <p>En la siguiente tabla se pueden visualizar los resultados de la búsqueda y el
+                                            proceso que se llevó acabo en los pasos indicados anteriormente.</p>
+                                        <div class="ibox-tools">
+                                            <a class="collapse-link">
+                                                <i class="fa fa-chevron-up"></i>
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <div class="ibox-content">
+                                        {{html_table|safe}}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="wrapper wrapper-content animated fadeInRight" style="padding-bottom: 0%"> 
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <div class="ibox"> 
+                                    <div class="ibox-title">
+                                        <h5>Analisis de Sentimientos</h5>
+                                        <p>Este grafico nos permite vizualizar los resultados del analisis de sentimientos. </p>
+                                        <div class="ibox-tools">
+                                            <a class="collapse-link">
+                                                <i class="fa fa-chevron-up"></i>
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <div class="ibox-content">
+                                        <img style="max-width: 100%" src="{{ responseSentimientos }}">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="ibox ">
+                                    <div class="ibox-title">
+                                        <h5>Nube de Palabras</h5>
+                                        <p>La nube de palabras permite visualizar de una forma mucho más grafica cuales
+                                            son las palabras más frecuentes que conforman los tweets de la búsqueda.</p>
+                                        <div class="ibox-tools">
+                                            <a class="collapse-link">
+                                                <i class="fa fa-chevron-up"></i>
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <div class="ibox-content">
+                                        <img style="max-width: 100%" src="{{ responseWordCloud }}">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="wrapper wrapper-content animated fadeInRight" style="padding-bottom: 0%">
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div class="ibox">
+                                    <div class="ibox-title">
+                                        <h5>Frecuencia de Palabras (TOP 30)</h5>
+                                        <p>Este grafico nos permite identificar cuáles son las palabras más frecuentes
+                                            en los tweets que se obtuvieron de la búsqueda.</p>
+                                        <div class="ibox-tools">
+                                            <a class="collapse-link">
+                                                <i class="fa fa-chevron-up"></i>
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <div class="ibox-content">
+                                        <img style="max-width: 100%" src="{{ responseImage }}">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="wrapper wrapper-content animated fadeInRight" style="padding-bottom: 0%">
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div class="ibox ">
+                                    <div class="ibox-title">
+                                        <h5>Categorizacion de Palabras</h5>
+                                        <p>Cada nube de palabras corresponde a una caterogia generada en el proceso de
+                                            clusterización por K-means</p>
+                                        <div class="ibox-tools">
+                                            <a class="collapse-link">
+                                                <i class="fa fa-chevron-up"></i>
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <div class="ibox-content">
+                                        <div class="row">
+                                            <div id="Categoria0" class="col-sm-6 b-r">
+                                                <h5>Categoria 0</h5>
+                                                <img style="max-width: 100%" src="{{ responseClustering0 }}">
+                                            </div>
+                                            <div id="Categoria1" class="col-sm-6">
+                                                <h5>Categoria 1</h5>
+                                                <img style="max-width: 100%" src="{{ responseClustering1 }}">
+                                            </div>
+
+                                        </div>
+                                        <div class="row">
+                                            <div id="Categoria2" class="col-sm-6 b-r">
+                                                <h5>Categoria 2</h5>
+                                                <img style="max-width: 100%" src="{{ responseClustering2 }}">
+                                            </div>
+                                            <div id="Categoria3" class="col-sm-6">
+                                                <h5>Categoria 3</h5>
+                                                <img style="max-width: 100%" src="{{ responseClustering3 }}">
+                                            </div>
+
+                                        </div>
+                                        <div class="row"> 
+                                            <div id="Categoria4" class="col-sm-6 b-r">
+                                                <h5>Categoria 4</h5>
+                                                <img style="max-width: 100%" src="{{ responseClustering4 }}">
+                                            </div>
+                                            <div id="Categoria5" class="col-sm-6">
+                                                <h5>Categoria 5</h5>
+                                                <img style="max-width: 100%" src="{{ responseClustering5 }}">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="wrapper wrapper-content animated fadeInRight" style="padding-bottom: 0%">
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div class="ibox">
+                                    <div class="ibox-title">
+                                        <h5>Geolocalización</h5>
+                                        <p>Este grafico nos permite identificar la ubicacion desde donde se originaron los tweets analizados. (Esta parte del desarrollo es con información de prueba)</p>
+                                        <div class="ibox-tools">
+                                            <a class="collapse-link">
+                                                <i class="fa fa-chevron-up"></i>
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <div class="ibox-content">
+                                        <img style="max-width: 100%;display: block;margin: auto;" src="{{ responseMap }}">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
