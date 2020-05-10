@@ -24,28 +24,33 @@ import random
 import nltk
 import json
 import io
+import os
 
 
 def ObtieneTweets(Busqueda, Cantidad):
     
-    Archivo = 0
     credentials = {}  
     credentials['CONSUMER_KEY'] = 'oRSMrRLW5LTnmxCYNI0TBxKAt'  
     credentials['CONSUMER_SECRET'] = 'wSqv5dzvEPCXYvOh9Te7sptXonMxaHWJ4cZsHQySNLrO1kNUe5'
     credentials['ACCESS_TOKEN'] = '1034819063824965633-zVmUkaSSDQJRmizgMoMomYMcZsyfb3'  
     credentials['ACCESS_SECRET'] = 'GLS13zAeK1y3KcDbmcD1VddvfnxOrI3TgSv4nk0GW5O6C'
     python_tweets = Twython(credentials['CONSUMER_KEY'], credentials['CONSUMER_SECRET'],credentials['ACCESS_TOKEN'],credentials['ACCESS_SECRET'])
+    
     t = str(date.today())
+    search= python_tweets.search(q=Busqueda,count=Cantidad,lang='es')['statuses']
+    
+    dir = os.path.dirname(__file__)
+    filename = dir + '\\data\\Tweets_'+ Busqueda.lower()
+    os.makedirs(filename,exist_ok=True)
 
-    #Obtiene Tweets
-    #Fecha = "2018-11-16"
-    if Archivo == 0: 
-        search= python_tweets.search(q=Busqueda,count=Cantidad,lang='es')['statuses']
-    else:
-        with open('C:\\Users\\tnt89\\Tweets_'+ Busqueda +'\\Tweets_'+ t +'.txt') as f:
-            content = f.read()
-            content = content.replace('}{','},{')
-            search = json.loads('['+content+']')
+    for result in search:   
+        with open(filename +'\\Tweets_'+ t +'.txt', 'a') as outfile:
+            json.dump(result, outfile, sort_keys = True, indent = 4)
+
+    with open(filename +'\\Tweets_'+ t +'.txt') as f:
+        content = f.read()
+        content = content.replace('}{','},{')
+        search = json.loads('['+content+']')
 
     dict_ = {'user': [], 'date': [], 'text': [], 'text_clean': [], 'loc':[], 'favorite_count': [],
              'Busqueda':[], 'ValorAnalisisSentimientos':[], 'AnalisisSentimientos':[], 'latitud':[], 
@@ -53,7 +58,7 @@ def ObtieneTweets(Busqueda, Cantidad):
     
     CantTweets = 0
 
-    dfcities = pd.read_csv('core\\resource\\worldcities.csv')
+    dfcities = pd.read_csv(dir + '\\resource\\worldcities.csv')
     print(dfcities)
 
     for status in search:  
@@ -79,13 +84,13 @@ def ObtieneTweets(Busqueda, Cantidad):
 
         analysis = TextBlob(status['text'])
 
-        #try:
-            #analysis = TextBlob(status['text']).translate(to='en')
-        #except:
-            #analysis = TextBlob(status['text'])
+        try:
+            analysis = TextBlob(status['text']).translate(to='en')
+        except:
+            analysis = TextBlob(status['text'])
         
         dict_['ValorAnalisisSentimientos'].append(analysis.sentiment.polarity)
-        if analysis.sentiment.polarity > 1: 
+        if analysis.sentiment.polarity >= 1: 
             dict_['AnalisisSentimientos'].append('Positivo')
         elif analysis.sentiment.polarity == 0: 
             dict_['AnalisisSentimientos'].append('Neutral')
