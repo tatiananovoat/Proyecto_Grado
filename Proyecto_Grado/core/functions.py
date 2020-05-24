@@ -68,8 +68,8 @@ def ObtieneTweets(Busqueda, Cantidad):
         dict_['user'].append(status['user']['screen_name'])
         dict_['loc'].append(status['user']['location'])
         dict_['date'].append(status['created_at'])
-        dict_['text'].append(unidecode.unidecode(status['text']))
-        dict_['text_clean'].append(status['text'])
+        dict_['text'].append(unidecode.unidecode(status['text']).lower())
+        dict_['text_clean'].append(status['text'].lower())
         dict_['favorite_count'].append(status['favorite_count'])
         #dict_['hashtags'].append([hashtag['text'] for hashtag in status['entities']['hashtags']])
         dict_['Busqueda'].append(Busqueda)
@@ -83,6 +83,8 @@ def ObtieneTweets(Busqueda, Cantidad):
 
         CantTweets= CantTweets+1
 
+        #analysis = TextBlob(status['text'])
+        
         try:
             analysis = TextBlob(status['text']).translate(to='en')
         except:
@@ -135,7 +137,7 @@ def LimpiarTextoTweets(df, Busqueda):
 def PlotAnalisisSentimientos(Tweets):
 
     counts = Counter(Tweets['AnalisisSentimientos'])
-    colors = ['gold', 'lightcoral', 'yellowgreen']
+    colors = ['gold','yellowgreen','lightcoral']
 
     f = pyplot.figure(figsize=(8,5))
     
