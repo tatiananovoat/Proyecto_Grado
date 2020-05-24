@@ -29,6 +29,7 @@ import os
 
 def ObtieneTweets(Busqueda, Cantidad):
     
+    Consultar = 0
     credentials = {}  
     credentials['CONSUMER_KEY'] = 'oRSMrRLW5LTnmxCYNI0TBxKAt'  
     credentials['CONSUMER_SECRET'] = 'wSqv5dzvEPCXYvOh9Te7sptXonMxaHWJ4cZsHQySNLrO1kNUe5'
@@ -37,15 +38,17 @@ def ObtieneTweets(Busqueda, Cantidad):
     python_tweets = Twython(credentials['CONSUMER_KEY'], credentials['CONSUMER_SECRET'],credentials['ACCESS_TOKEN'],credentials['ACCESS_SECRET'])
     
     t = str(date.today())
-    search= python_tweets.search(q=Busqueda,count=Cantidad,lang='es')['statuses']
     
     dir = os.path.dirname(__file__)
     filename = dir + '\\data\\Tweets_'+ Busqueda.lower()
-    os.makedirs(filename,exist_ok=True)
 
-    for result in search:   
-        with open(filename +'\\Tweets_'+ t +'.txt', 'a') as outfile:
-            json.dump(result, outfile, sort_keys = True, indent = 4)
+    if Consultar == 1:
+        search= python_tweets.search(q=Busqueda,count=Cantidad,lang='es')['statuses']
+        os.makedirs(filename,exist_ok=True)
+
+        for result in search:   
+            with open(filename +'\\Tweets_'+ t +'.txt', 'a') as outfile:
+                json.dump(result, outfile, sort_keys = True, indent = 4)
 
     with open(filename +'\\Tweets_'+ t +'.txt') as f:
         content = f.read()
@@ -59,7 +62,6 @@ def ObtieneTweets(Busqueda, Cantidad):
     CantTweets = 0
 
     dfcities = pd.read_csv(dir + '\\resource\\worldcities.csv')
-    print(dfcities)
 
     for status in search:  
         #print(status)
@@ -80,9 +82,6 @@ def ObtieneTweets(Busqueda, Cantidad):
         dict_['longitud'].append(dfcities.loc[valrandom].lng)
 
         CantTweets= CantTweets+1
-        print(CantTweets)
-
-        analysis = TextBlob(status['text'])
 
         try:
             analysis = TextBlob(status['text']).translate(to='en')
@@ -90,12 +89,14 @@ def ObtieneTweets(Busqueda, Cantidad):
             analysis = TextBlob(status['text'])
         
         dict_['ValorAnalisisSentimientos'].append(analysis.sentiment.polarity)
-        if analysis.sentiment.polarity >= 1: 
+        if analysis.sentiment.polarity > 0: 
             dict_['AnalisisSentimientos'].append('Positivo')
         elif analysis.sentiment.polarity == 0: 
             dict_['AnalisisSentimientos'].append('Neutral')
-        else: 
+        elif analysis.sentiment.polarity < 0: 
             dict_['AnalisisSentimientos'].append('Negativo')
+        
+        print(str(CantTweets) + '-> ' + str(analysis.sentiment.polarity))
         
     df = pd.DataFrame(dict_) 
     return df
