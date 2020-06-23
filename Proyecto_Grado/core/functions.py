@@ -29,7 +29,7 @@ import os
 
 def ObtieneTweets(Busqueda, Cantidad):
     
-    Consultar = 0
+    Consultar = 1
     credentials = {}  
     credentials['CONSUMER_KEY'] = 'oRSMrRLW5LTnmxCYNI0TBxKAt'  
     credentials['CONSUMER_SECRET'] = 'wSqv5dzvEPCXYvOh9Te7sptXonMxaHWJ4cZsHQySNLrO1kNUe5'
@@ -137,7 +137,7 @@ def LimpiarTextoTweets(df, Busqueda):
 def PlotAnalisisSentimientos(Tweets):
 
     counts = Counter(Tweets['AnalisisSentimientos'])
-    colors = ['gold','yellowgreen','lightcoral']
+    colors = ['yellowgreen','gold','lightcoral']
 
     f = pyplot.figure(figsize=(8,5))
     
